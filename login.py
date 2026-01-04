@@ -1,9 +1,8 @@
-# login.py
 import tkinter as tk
 import customtkinter as ctk
 from tkinter import messagebox
 import database
-from Aurelia_GUI import AureliaGUI  # Import the main app class
+from Aurelia_GUI import AureliaGUI 
 
 class LoginRegisterApp:
     def __init__(self, root):
@@ -43,12 +42,9 @@ class LoginRegisterApp:
         user_id = database.check_user(username, password)
         if user_id:
             messagebox.showinfo("Success", "Login successful!")
-            self.root.destroy()  # Close the login window
-            
-            # --- This is Line 48 (approx) ---
-            # It creates the new window for the main app
+            self.root.destroy()  
             main_app_root = ctk.CTk()
-            app = AureliaGUI(main_app_root, user_id=user_id, username=username) # Passes user info
+            app = AureliaGUI(main_app_root, user_id=user_id, username=username) 
             main_app_root.mainloop()
         else:
             messagebox.showerror("Error", "Invalid username or password.")
@@ -87,7 +83,8 @@ class LoginRegisterApp:
         register_btn.pack(pady=20)
 
 if __name__ == "__main__":
-    database.setup_database()  # Ensure DB and tables exist
+    database.setup_database() 
     root = ctk.CTk()
     app = LoginRegisterApp(root)
+
     root.mainloop()
