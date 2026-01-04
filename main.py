@@ -11,11 +11,9 @@ import subprocess
 import shutil
 import winreg
 import pywhatkit as pw
-from langdetect import detect  # for language detection
+from langdetect import detect 
 import re
-# ---------------- API KEYS ----------------
 from Api import OPENWEATHER_API, GENAI_API
-# ---------------- CLASS ----------------
 class VoiceAssistant:
     def __init__(self, name="Aurelia"):
         self.name = name
@@ -23,8 +21,7 @@ class VoiceAssistant:
         self.engine = pyttsx4.init()
         self.engine.setProperty('rate', 125)
         self._set_female_voice()
-
-        # --- Websites ---
+        
         self.websites = {
             "google": "https://google.com",
             "instagram": "https://instagram.com",
@@ -36,10 +33,8 @@ class VoiceAssistant:
             "github": "https://github.com"
         }
 
-        # --- Wake Words ---
         self.wake_words = ["aurelia", "aurlia", "aurelio"]
 
-    # ---------------- VOICE + SPEAK ----------------
     def _set_female_voice(self):
         voices = self.engine.getProperty('voices')
         for voice in voices:
@@ -64,22 +59,19 @@ class VoiceAssistant:
         self.engine.say(cleaned_text)
         self.engine.runAndWait()
 
-    # ---------------- LISTEN ----------------
     def listen(self, timeout=6, phrase_time_limit=5, lang="en-IN"):
         with sr.Microphone() as source:
             self.r.adjust_for_ambient_noise(source, duration=1)
             print("Listening...")
             audio = self.r.listen(source, timeout=timeout, phrase_time_limit=phrase_time_limit)
             return self.r.recognize_google(audio, language=lang).lower()
-
-    # ---------------- AI PROCESSING ----------------
+            
     def ai_process(self, query, lang="en"):
         genai.configure(api_key=GENAI_API)
         model = genai.GenerativeModel("gemini-2.5-pro")
         response = model.generate_content(query)
         return response.text
 
-    # ---------------- FIND APP IN PC ----------------
     def find_app_in_pc(self, app_name):
         reg_paths = [
             r"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths",
@@ -99,7 +91,6 @@ class VoiceAssistant:
                 continue
         return None
 
-    # ---------------- WEATHER INFO ----------------
     def get_weather(self, city, lang="en"):
         try:
             url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={OPENWEATHER_API}&units=metric&lang={lang}"
@@ -117,7 +108,6 @@ class VoiceAssistant:
         except Exception as e:
             return f"Error fetching weather: {e}"
 
-    # ---------------- PROCESS COMMAND ----------------
     def process_command(self, c):
         c = c.lower()
         lang = "hi" if detect(c) == "hi" else "en"
@@ -173,7 +163,6 @@ class VoiceAssistant:
             self.speak(result, lang)
 
 
-# ---------------- MAIN CLASS ----------------
 class Main(VoiceAssistant):
     def run(self):
         self.speak(f"{self.name} is initializing...")
@@ -214,3 +203,4 @@ class Main(VoiceAssistant):
 if __name__ == "__main__":
     assistant = Main("Aurelia")
     assistant.run()
+
