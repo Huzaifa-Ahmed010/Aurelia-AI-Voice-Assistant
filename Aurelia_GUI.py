@@ -24,7 +24,6 @@ class AureliaGUI:
         self.listening = False
         self.assistant_thread = None
 
-        # --- NEW: Store logged-in user's details ---
         self.user_id = user_id
         self.username = username
 
@@ -72,7 +71,6 @@ class AureliaGUI:
         self.update_clock()
         self.animate_pulse()
         
-        # --- NEW: Load conversation history on startup ---
         self.load_history()
 
     def resource_path(self, relative_path):
@@ -221,4 +219,5 @@ class AureliaGUI:
             self.root.destroy()
             subprocess.Popen([sys.executable, "login.py"]) 
         except Exception as e:
+
             print(f"Error during logout: {e}")
