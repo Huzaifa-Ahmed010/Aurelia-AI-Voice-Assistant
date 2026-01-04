@@ -24,5 +24,3 @@ if 'cgi' not in sys.modules:
     cgi.escape = escape
     cgi.parse_header = parse_header
     sys.modules['cgi'] = cgi
-
-# -------------------------------------------------------------------
